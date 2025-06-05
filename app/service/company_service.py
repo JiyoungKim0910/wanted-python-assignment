@@ -36,3 +36,7 @@ def get_company_by_name(name: str, lang: str, db: Session):
     company_name = get_localized(company.names, lang)
     tags = [get_localized(ct.tag.names, lang) for ct in company.tags]
     return {"company_name":company_name, "tags": sorted(set(tags))}
+
+#search_by_tag
+#add_tags
+#delete_tag
