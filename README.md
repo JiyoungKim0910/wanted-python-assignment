@@ -13,49 +13,8 @@ FastAPI 기반의 다국어 회사/태그 검색 REST API 입니다.
 
 ## ERD
 
-```text
-[companies]
-
--   id (PK)
-
-          │
-          └────────────┐
-                       ▼
-
-[company_names]
-
--   id (PK)
--   language (string)
--   name (string)
--   company_id (FK → companies.id)
-
-            ▲
-            │
-            │
-
-    [company_tags] (중간 테이블)
-
--   id (PK)
--   company_id (FK → companies.id)
--   tag_id (FK → tags.id)
-    │
-    ▼
-
-[tags]
-
--   id (PK)
-
-          │
-          └────────────┐
-                       ▼
-
-[tag_names]
-
--   id (PK)
--   language (string)
--   name (string)
--   tag_id (FK → tags.id)
-```
+<pre lang="markdown"> ```mermaid 
+erDiagram companies ||--o{ company_names : has companies ||--o{ company_tags : links tags ||--o{ tag_names : has tags ||--o{ company_tags : links companies { int id PK } company_names { int id PK string language string name int company_id FK } tags { int id PK } tag_names { int id PK string language string name int tag_id FK } company_tags { int id PK int company_id FK int tag_id FK } ``` </pre>
 
 ## 기술 스택
 
