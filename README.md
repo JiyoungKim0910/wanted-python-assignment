@@ -13,7 +13,7 @@ FastAPI 기반의 다국어 회사/태그 검색 REST API 입니다.
 
 ## ERD
 
-```scss
+<pre lang="markdown"> ```text
 [companies]
 
 -   id (PK)
@@ -56,6 +56,7 @@ FastAPI 기반의 다국어 회사/태그 검색 REST API 입니다.
 -   name (string)
 -   tag_id (FK → tags.id)
 ```
+</pre>
 
 ## 기술 스택
 
