@@ -1,6 +1,6 @@
 # wanted-python-assignment
 
-Flask 기반의 다국어 회사/태그 검색 REST API 입니다.
+FastAPI 기반의 다국어 회사/태그 검색 REST API 입니다.
 
 ## 주요 기능
 
@@ -10,3 +10,20 @@ Flask 기반의 다국어 회사/태그 검색 REST API 입니다.
 -   다국어 검색 가능
 -   회사 태그 정보 추가
 -   회사 태그 정보 삭제
+
+## ERD
+
+```mermaid
+erDiagram
+    companies ||--o{ company_names : has
+    companies ||--o{ company_tags : links
+    tags ||--o{ tag_names : has
+    tags ||--o{ company_tags : links
+
+    companies { int id PK }
+    company_names { int id PK string language string name int company_id FK }
+    tags { int id PK }
+    tag_names { int id PK string language string name int tag_id FK }
+    company_tags { int id PK int company_id FK int tag_id FK }
+
+```
