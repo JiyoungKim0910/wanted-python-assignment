@@ -10,5 +10,8 @@ RUN pip install --upgrade pip & pip install -r requirements.txt
 # 앱 코드 복사
 COPY . .
 
-# 컨테이너 실행 시 명령어
-CMD [ "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000" ]
+# 실행 권한 부여
+RUN chmod +x /app/init.sh
+
+# 실행 명령어
+CMD ["sh", "/app/init.sh"]

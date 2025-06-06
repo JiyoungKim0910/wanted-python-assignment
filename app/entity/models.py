@@ -5,8 +5,8 @@ from app.database import Base
 class Company(Base):
     __tablename__ = "companies"
     id = Column(Integer, primary_key=True)
-    names = relationship("CompanyName", back_populates="company",cascade="all,delete")
-    tags = relationship("CompanyTag", back_populates="company", cascade="all,delete")
+    company_name = relationship("CompanyName", back_populates="company",cascade="all,delete")
+    tags = relationship("CompanyTag", back_populates="company", cascade="all,delete", lazy="joined")
     
 class CompanyName(Base):
     __tablename__ = "company_names"
@@ -14,13 +14,13 @@ class CompanyName(Base):
     language = Column(String, nullable=False) # 언어코드
     name = Column(String, nullable=False)
     company_id = Column(Integer, ForeignKey("companies.id"))
-    company = relationship("Company", back_populates="names")
+    company = relationship("Company", back_populates="company_name")
     
 class Tag(Base):
     __tablename__ = "tags"
     id = Column(Integer, primary_key=True)
-    names = relationship("TagName",back_populates="tag",cascade="all,delete")
-    company_tags = relationship("CompanyTag",back_populates="tag")
+    tag_names = relationship("TagName",back_populates="tag",cascade="all,delete")
+    company_tags = relationship("CompanyTag",back_populates="tag",cascade="all, delete")
     
 class TagName(Base):
     __tablename__ = "tag_names"
@@ -28,7 +28,7 @@ class TagName(Base):
     language = Column(String, nullable=False) # 언어 코드
     name = Column(String, nullable=False)
     tag_id = Column(Integer,ForeignKey("tags.id"))
-    tag = relationship("Tag", back_populates="names")
+    tag = relationship("Tag", back_populates="tag_names")
     
 class CompanyTag(Base):
     __tablename__ = "company_tags"
