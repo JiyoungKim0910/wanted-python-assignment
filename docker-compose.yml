@@ -4,8 +4,6 @@ services:
         container_name: wanted-fastapi
         ports:
             - "8000:8000"
-        volumes:
-            - .:/app
         environment:
             - PYTHONUNBUFFERED=1
         restart: always
