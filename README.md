@@ -37,6 +37,7 @@ erDiagram
 
 -   Docker: https://www.docker.com/
 -   Docker Compose
+-   최신버전 설치
 
 2. 실행 방법
 
