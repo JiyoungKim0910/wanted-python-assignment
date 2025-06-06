@@ -52,22 +52,27 @@ docker compose up --build
     -   테스트 실행 (pytest)
     -   FastAPI 서버 실행 (http://localhost:8000)
 
-1. API 문서보기
+3. API 문서보기
    FastAPI 가 제공하는 Swagger 문서로 접속할 수 있습니다.
 
--   http://localhost:8000/docs
+    - http://localhost:8000/docs
 
 4. docker 명령어 정리
 
--   컨테이너 종료
+    - 컨테이너 종료
+
     ```bash
     docker compose down
     ```
--   캐시 무시하고 build
+
+    - 캐시 무시하고 build
+
     ```bash
     docker compose build --no-cache
     ```
--   build 파일 실행
+
+    - build 파일 실행
+
     ```bash
     docker compose run --rm app
     ```
