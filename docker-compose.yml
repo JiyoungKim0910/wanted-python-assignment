@@ -1,9 +1,7 @@
 services:
-    web:
+    app:
         build: .
-        container_name: wanted-fastapi
+        container_name: wanted-app
+        command: sh /app/init.sh
         ports:
             - "8000:8000"
-        environment:
-            - PYTHONUNBUFFERED=1
-        restart: always

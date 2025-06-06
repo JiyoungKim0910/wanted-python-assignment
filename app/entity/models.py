@@ -6,7 +6,7 @@ class Company(Base):
     __tablename__ = "companies"
     id = Column(Integer, primary_key=True)
     company_name = relationship("CompanyName", back_populates="company",cascade="all,delete")
-    tags = relationship("CompanyTag", back_populates="company", cascade="all,delete")
+    tags = relationship("CompanyTag", back_populates="company", cascade="all,delete", lazy="joined")
     
 class CompanyName(Base):
     __tablename__ = "company_names"

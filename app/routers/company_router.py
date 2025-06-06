@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from app.database import SessionLocal
 from app.entity.models import Company, CompanyName, Tag, TagName, CompanyTag
-from app.schemas import CompanyResponseSchema, TagNameSchema, TagUpdateSchema ,CompanyCreateSchema
+from app.schemas import CompanyResponseSchema, TagNameSchema, TagUpdateSchema ,CompanyCreateSchema, CompanyNameSchema
 from app.service import company_service
 
 router = APIRouter()
@@ -17,7 +17,7 @@ def get_db():
         db.close
     
     
-@router.get("/search", response_model=List[dict], summary="회사명 자동완성" , tags=["Company"])
+@router.get("/search", response_model=List[CompanyNameSchema], summary="회사명 자동완성" , tags=["Company"])
 def autocomplete_company(
     query: str = Query(..., description="회사명 일부"),
     x_wanted_language: str = Header("ko"),
@@ -25,7 +25,7 @@ def autocomplete_company(
 ):
     return company_service.search_company_autocomplete(query, x_wanted_language, db)
 
-@router.get("/companies/{name}", summary="회사명 검색", tags=["Company"])
+@router.get("/companies/{name}", response_model=CompanyResponseSchema, summary="회사명 검색", tags=["Company"])
 def get_company(
     name: str ,
     x_wanted_language: str = Header("ko"),
@@ -42,7 +42,7 @@ def create_company(
     return company_service.create_company(body, x_wanted_language, db)
 
 
-@router.get("/tags", response_model=List[str] , summary="태그명으로 회사 검색", tags=["Tag"])
+@router.get("/tags", response_model=List[CompanyNameSchema] , summary="태그명으로 회사 검색", tags=["Tag"])
 def get_company_by_tag(
     query: str = Query(..., description="태그명"),
     x_wanted_language: str = Header("ko"),

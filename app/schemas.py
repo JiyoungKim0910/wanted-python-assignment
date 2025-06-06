@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 from pydantic import BaseModel, Field
 
 class TagNameSchema(BaseModel):
@@ -20,3 +20,6 @@ class CompanyCreateSchema(BaseModel):
             ,example={"en": "Wantedlab", "ko": "원티드랩"} 
     )
     tags: List[TagNameSchema]
+
+class CompanyNameSchema(BaseModel):
+    company_name: Optional[str] = Field(..., description="요청 언어 기준의 회사명")

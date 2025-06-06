@@ -25,11 +25,19 @@ def link_company_tag(company_id: int, tag_id: int, db: Session):
     
 # 태그명으로 회사 검색
 def get_companies_by_tag(name: str, db: Session):
-    return (db.query(TagName)
-    .options(
-        joinedload(TagName.tag)
-        .joinedload(Tag.company_tags)
-        .joinedload(CompanyTag.company)
-        .joinedload(Company.company_name)
-    )
-    .filter(TagName.name == name).all())
+    return db.query(TagName).filter(TagName.name == name).all()
+    
+def unlink_company_tag(company_id: int, tag_id: int, db: Session):
+    # 회사와 연결 삭제
+    db.query(CompanyTag).filter_by(company_id=company_id, tag_id=tag_id).delete()
+    
+def get_count_tag_link(tag_id: int, db: Session):
+    return db.query(CompanyTag).filter_by(tag_id=tag_id).count()
+
+def delete_tag_name(tag_id: int, db: Session):
+    # TagName 삭제
+    db.query(TagName).filter_by(tag_id=tag_id).delete()
+    # Tag 삭제
+    db.query(Tag).filter_by(id=tag_id).delete()
+    
+    

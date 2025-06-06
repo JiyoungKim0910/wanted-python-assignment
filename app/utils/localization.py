@@ -1,4 +1,4 @@
-def get_localized(items, lang: str) -> str | None:
+def get_localized(items, lang: str):
     """
     언어 코드(lang)에 해당하는 name을 반환,
     없으면 첫 번째 값을 fallback으로 반환
