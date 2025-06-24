@@ -17,9 +17,14 @@ def create_company(db: Session) -> Company:
     company = Company()
     db.add(company)
     db.flush()
+    db.refresh(company)
     return company
 
 # 회사 이름 추가
 def add_company_name(company: Company, language: str, name: str, db: Session):
-    db.add(CompanyName(company=company, language=language, name=name))
+    company_name = CompanyName(company=company, language=language, name=name)
+    db.add(company_name)
+    db.flush()
+    db.refresh(company_name)
+    return company_name
     

@@ -44,9 +44,7 @@ def create_company(data: CompanyCreateSchema, lang:str, db: Session):
     
     for l, name in data.company_name.items():
         company_repository.add_company_name(company, l, name, db)
-        db.flush()
-    
-    db.refresh(company)
+        
     c_name = get_localized(company.company_name, lang)
     
     return add_tags(c_name, data.tags, lang, db=db)
@@ -84,10 +82,7 @@ def add_tags(name: str, tags: List[TagUpdateSchema], lang: str, db: Session):
         for l, tagname in tag_data.tag_name.items():
             # 다국어 TagName 추가
             tag = tag_repository.add_tag(tagname,l,c_tag,db)
-        tag_repository.link_company_tag(company.id, c_tag.id, db)
-        db.flush()
-    
-    db.refresh(company)
+        tag_repository.link_company_tag(company, c_tag.id, db)
     
     c_name = get_localized(company.company_name, lang)
     localized_tags = []
@@ -112,15 +107,13 @@ def delete_tag(name: str, tag_name: str, lang: str, db: Session):
     tag_id = tags[0].tag_id
     
     # 회사랑 태그연결 해제
-    tag_repository.unlink_company_tag(company.id,tag_id,db)
+    tag_repository.unlink_company_tag(company,tag_id,db)
     
     #해당 태그가 더 이상 어떤 회사와도 연결되어 있지 않다면
     #Tag가 Orphan 될 수 있으므로 태그명도 삭제
     remaining_links = tag_repository.get_count_tag_link(tag_id,db)
     if remaining_links == 0:
-        tag_repository.delete_tag_name(tag_id, db)
-    
-    db.refresh(company)
+        tag_repository.delete_tag_name(tag_id, db,company)
     
     c_name = get_localized(company.company_name, lang)
     localized_tags = []
