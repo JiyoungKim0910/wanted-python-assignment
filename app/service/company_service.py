@@ -5,7 +5,7 @@ from app.entity.models import Company
 from app.repositories import company_repository, tag_repository
 from app.schemas import CompanyCreateSchema, TagUpdateSchema, CompanyResponseSchema, CompanyNameSchema
 from app.utils.localization import get_localized, get_localized_strict
-
+from app.utils.db_transaction import transactional
 
 # 회사명 자동 완성
 def search_company_autocomplete(query: str, lang: str, db: Session):
@@ -38,17 +38,18 @@ def get_company_by_name(name: str, lang: str, db: Session):
 
 
 # 회사 추가
+@transactional
 def create_company(data: CompanyCreateSchema, lang:str, db: Session):
     company = company_repository.create_company(db)
     
     for l, name in data.company_name.items():
         company_repository.add_company_name(company, l, name, db)
         db.flush()
-    db.commit()
+    
     db.refresh(company)
     c_name = get_localized(company.company_name, lang)
     
-    return add_tags(c_name, data.tags, lang, db)
+    return add_tags(c_name, data.tags, lang, db=db)
     
 
     
@@ -71,6 +72,7 @@ def search_by_tag(tag_name: str, lang: str, db: Session):
     return result
 
 # 태그 추가
+@transactional
 def add_tags(name: str, tags: List[TagUpdateSchema], lang: str, db: Session):
     company = company_repository.get_company_by_name(name, db)
     if not company:
@@ -84,7 +86,7 @@ def add_tags(name: str, tags: List[TagUpdateSchema], lang: str, db: Session):
             tag = tag_repository.add_tag(tagname,l,c_tag,db)
         tag_repository.link_company_tag(company.id, c_tag.id, db)
         db.flush()
-    db.commit()
+    
     db.refresh(company)
     
     c_name = get_localized(company.company_name, lang)
@@ -97,6 +99,7 @@ def add_tags(name: str, tags: List[TagUpdateSchema], lang: str, db: Session):
     return CompanyResponseSchema(company_name=c_name,tags=unique_tags)
         
 # 태그 삭제
+@transactional
 def delete_tag(name: str, tag_name: str, lang: str, db: Session):
     company = company_repository.get_company_by_name(name, db)
     if not company:
@@ -116,7 +119,7 @@ def delete_tag(name: str, tag_name: str, lang: str, db: Session):
     remaining_links = tag_repository.get_count_tag_link(tag_id,db)
     if remaining_links == 0:
         tag_repository.delete_tag_name(tag_id, db)
-    db.commit()
+    
     db.refresh(company)
     
     c_name = get_localized(company.company_name, lang)

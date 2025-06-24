@@ -23,7 +23,7 @@ def autocomplete_company(
     x_wanted_language: str = Header("ko"),
     db: Session = Depends(get_db)
 ):
-    return company_service.search_company_autocomplete(query, x_wanted_language, db)
+    return company_service.search_company_autocomplete(query=query, lang=x_wanted_language, db=db)
 
 @router.get("/companies/{name}", response_model=CompanyResponseSchema, summary="회사명 검색", tags=["Company"])
 def get_company(
@@ -31,7 +31,7 @@ def get_company(
     x_wanted_language: str = Header("ko"),
     db: Session = Depends(get_db)
 ):
-    return company_service.get_company_by_name(name, x_wanted_language, db)
+    return company_service.get_company_by_name(name=name, lang=x_wanted_language, db=db)
 
 @router.post("/companies", response_model=CompanyResponseSchema, summary="회사 등록", tags=["Company"])
 def create_company(
@@ -39,7 +39,7 @@ def create_company(
     x_wanted_language: str = Header("ko"),
     db: Session = Depends(get_db)
 ):
-    return company_service.create_company(body, x_wanted_language, db)
+    return company_service.create_company(data=body, lang=x_wanted_language, db=db)
 
 
 @router.get("/tags", response_model=List[CompanyNameSchema] , summary="태그명으로 회사 검색", tags=["Tag"])
@@ -48,7 +48,7 @@ def get_company_by_tag(
     x_wanted_language: str = Header("ko"),
     db: Session = Depends(get_db)
 ):
-    return company_service.search_by_tag(query, x_wanted_language, db)
+    return company_service.search_by_tag(tag_name=query, lang=x_wanted_language, db=db)
 
 @router.put("/companies/{name}/tags", response_model=CompanyResponseSchema, summary="회사 태그 정보 추가", tags=["Tag"])
 def add_tag_to_company(
@@ -57,7 +57,7 @@ def add_tag_to_company(
     x_wanted_language: str = Header("ko"),
     db: Session = Depends(get_db)
 ):
-    return company_service.add_tags(name, tags, x_wanted_language, db)
+    return company_service.add_tags(name=name, tags=tags, lang=x_wanted_language, db=db)
 
 @router.delete("/companies/{name}/tags/{tagname}", response_model=CompanyResponseSchema, summary="회사 태그 정보 삭제", tags=["Tag"])
 def delete_tag(
@@ -66,6 +66,6 @@ def delete_tag(
     x_wanted_language: str = Header("ko"),
     db: Session = Depends(get_db)
 ):
-    return company_service.delete_tag(name, tagname, x_wanted_language, db)
+    return company_service.delete_tag(name=name, tag_name=tagname, lang=x_wanted_language, db=db)
 
 
